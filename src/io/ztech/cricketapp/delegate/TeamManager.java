@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import io.ztech.cricketapp.beans.Player;
 import io.ztech.cricketapp.beans.Team;
+import io.ztech.cricketapp.beans.User;
 import io.ztech.cricketapp.constants.UserMessages;
 import io.ztech.cricketapp.dao.CricketDAO;
 
@@ -17,9 +18,9 @@ public class TeamManager {
 		dao = new CricketDAO();
 	}
 	
-	public void displayTeams() {
+	/*public void displayTeams(User user) {
 		System.out.println(UserMessages.TEAM_TABLE);
-		ArrayList<Team> teamList = dao.fetchTeams();
+		ArrayList<Team> teamList = dao.fetchTeams(user);
 		for (Team team : teamList) {
 			System.out.println(team.getTeamId() + "\t" + team.getTeamName());
 			ArrayList<Player> playerList = dao.fetchTeamPlayers(team.getTeamId());
@@ -28,7 +29,7 @@ public class TeamManager {
 				System.out.println(player.getPlayerId() + "\t" + player.getFirstName() + "\t" + player.getLastName());
 			}
 		}
-	}
+	}*/
 	
 	public void createTeam(Team newTeam) {
 		dao.insertTeam(newTeam);

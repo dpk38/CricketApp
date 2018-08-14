@@ -11,7 +11,14 @@ public class Match {
 	Team teamA, teamB;
 	MatchResult matchResult;
 	LineUp lineUp;
+	User user;
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public LineUp getLineUp() {
 		return lineUp;
 	}

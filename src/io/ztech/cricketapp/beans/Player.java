@@ -3,7 +3,14 @@ package io.ztech.cricketapp.beans;
 public class Player {
 	int teamId, playerId;
 	String firstName, lastName;
+	User user;
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public int getTeamId() {
 		return teamId;
 	}

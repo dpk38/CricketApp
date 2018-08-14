@@ -2,8 +2,14 @@ package io.ztech.cricketapp.beans;
 
 public class User {
 	int userId;
-	String firstName, lastName, password;
+	String userName, firstName, lastName, password;
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public int getUserId() {
 		return userId;
 	}

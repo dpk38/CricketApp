@@ -2,6 +2,7 @@ package io.ztech.cricketapp.ui;
 
 import java.util.Scanner;
 
+import io.ztech.cricketapp.beans.User;
 import io.ztech.cricketapp.constants.MainMenuOptions;
 import io.ztech.cricketapp.constants.MatchMenuOptions;
 import io.ztech.cricketapp.constants.PlayerMenuOptions;
@@ -14,14 +15,17 @@ public class Menu {
 	Scanner scanner;
 	TeamHandler teamHandler;
 	TeamController teamController;
+	User user;
 	
-	public Menu() {
+	public Menu(User user) {
 		scanner = new Scanner(System.in);
 		teamHandler = new TeamHandler();
 		teamController = new TeamController();
+		this.user = user;
 	}
 	
 	public void showMainMenu() {
+		System.out.println();
 		System.out.print(UserMessages.MAIN_MENU);
 		MainMenuOptions option = MainMenuOptions.values()[scanner.nextInt() - 1];
 		scanner.nextLine();
@@ -36,6 +40,8 @@ public class Menu {
 			case PLAYERS:
 				showPlayerMenu();
 				break;
+			case EXIT:
+				return;
 			default:
 				System.out.println(UserMessages.INVALID_CHOICE);
 			}
@@ -50,16 +56,16 @@ public class Menu {
 		do {
 			switch (option) {
 			case PLAY_MATCH:
-				MatchService.playMatch();
+				//MatchService.playMatch();
 				break;
 			case VIEW_MATCHES:
-				MatchService.displayMatches();
+				//MatchService.displayMatches();
 				break;
 			case EDIT_MATCH:
-				MatchService.editMatch();
+				//MatchService.editMatch();
 				break;
 			case CREATE_MATCH:
-				MatchService.createMatch();
+				//MatchService.createMatch();
 				break;
 			default:
 				System.out.println(UserMessages.INVALID_CHOICE);
@@ -72,22 +78,19 @@ public class Menu {
 		System.out.print(UserMessages.TEAM_MENU);
 		TeamMenuOptions option = TeamMenuOptions.values()[scanner.nextInt() - 1];
 		scanner.nextLine();
-		do {
-			switch (option) {
-			case VIEW_TEAMS:
-				teamController.displayTeams();
-				break;
-			case EDIT_TEAM:
-				showEditTeamMenu();
-				break;
-			case CREATE_TEAM:
-				teamHandler.createTeam();
-				break;
-			default:
-				System.out.println(UserMessages.INVALID_CHOICE);
-			}
-			System.out.print(UserMessages.CONTINUE);
-		} while (Character.toLowerCase(scanner.next().charAt(0)) == 'y');
+		switch (option) {
+		case VIEW_TEAMS:
+			teamController.displayTeams(user);
+			break;
+		case EDIT_TEAM:
+			//showEditTeamMenu();
+			break;
+		case CREATE_TEAM:
+			teamHandler.createTeam(user);
+			break;
+		default:
+			System.out.println(UserMessages.INVALID_CHOICE);
+		}
 	}
 	
 	public void showPlayerMenu() {
@@ -97,10 +100,13 @@ public class Menu {
 		do {
 			switch (option) {
 			case VIEW_PLAYERS:
-				PlayerService.displayPlayer();
+				//PlayerController.displayPlayer();
 				break;
 			case EDIT_PLAYER:
-				PlayerService.editPlayer();
+				//PlayerController.editPlayer();
+				break;
+			case CREATE_PLAYER:
+				
 				break;
 			default:
 				System.out.println(UserMessages.INVALID_CHOICE);
@@ -109,7 +115,7 @@ public class Menu {
 		} while (Character.toLowerCase(scanner.next().charAt(0)) == 'y');
 	}
 	
-	public void showEditTeamMenu() {
+/*	public void showEditTeamMenu() {
 		System.out.print(UserMessages.EDIT_TEAM_MENU);	// change team name, add player, remove player
 		EditTeamOptions option = EditTeamOptions.values()[scanner.nextInt() - 1];
 		scanner.nextLine();
@@ -129,5 +135,5 @@ public class Menu {
 			}
 			System.out.print(UserMessages.FURTHER_CHANGES);
 		} while (Character.toLowerCase(scanner.next().charAt(0)) == 'y');	
-	}
+	}*/
 }
