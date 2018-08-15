@@ -104,7 +104,39 @@ public class CricketDAO {
 			ps.setInt(2, teamId);
 			ps.execute();
 		} catch (SQLException e) {
-			System.out.println("Exception caught at fetchTeams(): " + e);
+			System.out.println("Exception caught at updateTeamName(): " + e);
+		} finally {
+			connector.closeConnection(con, null, ps);
+		}
+	}
+	
+	public void updatePlayerTeam(int teamId, int playerId) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		
+		try {
+			ps = con.prepareStatement(Queries.UPDATE_PLAYER_TEAM);
+			ps.setInt(1, teamId);
+			ps.setInt(2, playerId);
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println("Exception caught at updatePlayerTeam(): " + e);
+		} finally {
+			connector.closeConnection(con, null, ps);
+		}
+	}
+	
+	public void updatePlayerName(int playerId, String newName, String query) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, newName);
+			ps.setInt(2, playerId);
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println("Exception caught at updatePlayerName(): " + e);
 		} finally {
 			connector.closeConnection(con, null, ps);
 		}
@@ -146,6 +178,7 @@ public class CricketDAO {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Player newPlayer = new Player();
+				newPlayer.setTeamId(rs.getInt("team_id"));
 				newPlayer.setPlayerId(rs.getInt("player_id"));
 				newPlayer.setFirstName(rs.getString("first_name"));
 				newPlayer.setLastName(rs.getString("last_name"));
@@ -180,6 +213,33 @@ public class CricketDAO {
 			}
 		} catch (SQLException e) {
 			System.out.println("Exception caught at fetchUser(): " + e);
+		} finally {
+			connector.closeConnection(con, rs, ps);
+		}
+		return user;
+	}
+	
+	public User fetchPlayer(User user) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement(Queries.FETCH_USER);
+			ps.setString(1, user.getUserName());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String password = rs.getString("password"); 
+				if (user.getPassword().equals(password)) {
+					user.setFirstName(rs.getString("first_name"));
+					user.setLastName(rs.getString("last_name"));
+					user.setUserId(rs.getInt("user_id"));
+				} else {
+					user = null;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Exception caught at fetchPlayer(): " + e);
 		} finally {
 			connector.closeConnection(con, rs, ps);
 		}
@@ -274,7 +334,7 @@ public class CricketDAO {
 			ps.setInt(2, playerId);
 			ps.execute();
 		} catch (SQLException e) {
-			System.out.println("Exception caught at searchPlayer(): " + e);
+			System.out.println("Exception caught at deletePlayer(): " + e);
 		} finally {
 			connector.closeConnection(con, rs, ps);
 		}

@@ -11,10 +11,12 @@ import io.ztech.cricketapp.dao.CricketDAO;
 
 public class TeamManager {
 	Scanner scanner;
+	PlayerManager playerManager;
 	CricketDAO dao;
 	
 	public TeamManager() {
 		scanner = new Scanner(System.in);
+		playerManager = new PlayerManager();
 		dao = new CricketDAO();
 	}
 	
@@ -23,11 +25,7 @@ public class TeamManager {
 		ArrayList<Team> teamList = dao.fetchTeams(user);
 		for (Team team : teamList) {
 			System.out.println(team.getTeamId() + "\t" + team.getTeamName());
-			ArrayList<Player> playerList = dao.fetchTeamPlayers(team);
-			System.out.println(UserMessages.PLAYER_TABLE);
-			for (Player player : playerList) {
-				System.out.println(player.getPlayerId() + "\t" + player.getFirstName() + "\t\t" + player.getLastName());
-			}
+			playerManager.printPlayerDetails(team);
 		}
 	}
 	
