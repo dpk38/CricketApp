@@ -87,14 +87,30 @@ public class CricketDAO {
 			rs.next();
 			teamId = rs.getInt(1);
 		} catch (SQLException e) {
-			System.out.println("Exception caught at insertTeam(): " + e);
+			System.out.println("Exception caught at getRecentTeamId(): " + e);
 		} finally {
 			connector.closeConnection(con, null, ps);
 		}
 		return teamId;
 	}
 	
-	public ArrayList<Team> fetchTeams() {
+	public void updateTeamName(int teamId, String newTeamName) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		
+		try {
+			ps = con.prepareStatement(Queries.UPDATE_TEAM_NAME);
+			ps.setString(1, newTeamName);
+			ps.setInt(2, teamId);
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println("Exception caught at fetchTeams(): " + e);
+		} finally {
+			connector.closeConnection(con, null, ps);
+		}
+	}
+	
+	public ArrayList<Team> fetchTeams(User user) {
 		PreparedStatement ps = null;
 		Connection con = connector.openConnection();
 		ResultSet rs = null;
@@ -102,6 +118,7 @@ public class CricketDAO {
 
 		try {
 			ps = con.prepareStatement(Queries.FETCH_TEAMS);
+			ps.setInt(1, user.getUserId());
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Team newTeam = new Team();
@@ -115,6 +132,58 @@ public class CricketDAO {
 			connector.closeConnection(con, rs, ps);
 		}
 		return teamList;
+	}
+	
+	public ArrayList<Player> fetchTeamPlayers(Team team) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		ResultSet rs = null;
+		ArrayList<Player> playerList = new ArrayList<>();
+		
+		try {
+			ps = con.prepareStatement(Queries.FETCH_TEAM_PLAYERS);
+			ps.setInt(1, team.getTeamId());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				Player newPlayer = new Player();
+				newPlayer.setPlayerId(rs.getInt("player_id"));
+				newPlayer.setFirstName(rs.getString("first_name"));
+				newPlayer.setLastName(rs.getString("last_name"));
+				playerList.add(newPlayer);
+			}
+		} catch (SQLException e) {
+			System.out.println("Exception caught at fetchTeamPlayers(): " + e);
+		} finally {
+			connector.closeConnection(con, rs, ps);
+		}
+		return playerList;
+	}
+	
+	public User fetchUser(User user) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		ResultSet rs = null;
+		
+		try {
+			ps = con.prepareStatement(Queries.FETCH_USER);
+			ps.setString(1, user.getUserName());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String password = rs.getString("password"); 
+				if (user.getPassword().equals(password)) {
+					user.setFirstName(rs.getString("first_name"));
+					user.setLastName(rs.getString("last_name"));
+					user.setUserId(rs.getInt("user_id"));
+				} else {
+					user = null;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Exception caught at fetchUser(): " + e);
+		} finally {
+			connector.closeConnection(con, rs, ps);
+		}
+		return user;
 	}
 	
 	public boolean searchUser(User user) {
@@ -142,29 +211,72 @@ public class CricketDAO {
 		return flag;
 	}
 	
-	public User fetchUser(User user) {
+	public boolean searchTeam(User user, int team_id) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		ResultSet rs = null;
+		boolean flag = false;
+		
+		try {
+			ps = con.prepareStatement(Queries.SEARCH_TEAM);
+			ps.setInt(1, team_id);
+			ps.setInt(2, user.getUserId());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt(1) == 0) {
+					flag = false;
+				} else {
+					flag = true;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Exception caught at searchTeam(): " + e);
+		} finally {
+			connector.closeConnection(con, rs, ps);
+		}
+		return flag;
+	}
+	
+	public boolean searchPlayer(User user, int player_id) {
+		PreparedStatement ps = null;
+		Connection con = connector.openConnection();
+		ResultSet rs = null;
+		boolean flag = false;
+		
+		try {
+			ps = con.prepareStatement(Queries.SEARCH_PLAYER);
+			ps.setInt(1, player_id);
+			ps.setInt(2, user.getUserId());
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt(1) == 0) {
+					flag = false;
+				} else {
+					flag = true;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Exception caught at searchPlayer(): " + e);
+		} finally {
+			connector.closeConnection(con, rs, ps);
+		}
+		return flag;
+	}
+	
+	public void deletePlayer(int teamId, int playerId) {
 		PreparedStatement ps = null;
 		Connection con = connector.openConnection();
 		ResultSet rs = null;
 		
 		try {
-			ps = con.prepareStatement(Queries.FETCH_USER);
-			ps.setString(1, user.getUserName());
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				String password = rs.getString("password"); 
-				if (user.getPassword().equals(password)) {
-					user.setFirstName(rs.getString("first_name"));
-					user.setLastName(rs.getString("last_name"));
-					user.setUserId(rs.getInt("user_id"));
-					return user;
-				}
-			}
+			ps = con.prepareStatement(Queries.DELETE_PLAYER);
+			ps.setInt(1, teamId);
+			ps.setInt(2, playerId);
+			ps.execute();
 		} catch (SQLException e) {
-			System.out.println("Exception caught at searchUser(): " + e);
+			System.out.println("Exception caught at searchPlayer(): " + e);
 		} finally {
 			connector.closeConnection(con, rs, ps);
 		}
-		return null;
 	}
 }

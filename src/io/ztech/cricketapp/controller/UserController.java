@@ -23,8 +23,8 @@ public class UserController {
 	}
 
 	public boolean createUser(User newUser) {
-		if (validator.validateInput(newUser.getFirstName(), Regex.nameRegex, UserMessages.INVALID_FIRST_NAME)
-				&& validator.validateInput(newUser.getFirstName(), Regex.nameRegex, UserMessages.INVALID_FIRST_NAME)) {
+		if (validator.validateInput(Regex.nameRegex, newUser.getFirstName(), UserMessages.INVALID_FIRST_NAME)
+				&& validator.validateInput(Regex.nameRegex, newUser.getFirstName(), UserMessages.INVALID_FIRST_NAME)) {
 			if (userManager.checkUser(newUser)) {
 				System.out.println(UserMessages.USER_ALREADY_EXISTS);
 				return false;

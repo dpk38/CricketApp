@@ -19,7 +19,7 @@ public class TeamController {
 	}
 
 	public void displayTeams(User user) {
-		//teamManager.displayTeams(user);
+		teamManager.displayTeams(user);
 	}
 
 	public void createTeam(Team newTeam) throws InvalidNameException {
@@ -30,5 +30,24 @@ public class TeamController {
 			}
 		}
 		teamManager.createTeam(newTeam);
+	}
+	
+	public boolean searchTeam(int teamId, User user) {
+		return teamManager.searchTeam(teamId, user);
+	}
+	
+	public void updateTeamName(int teamId, String newTeamName) throws InvalidNameException {
+		if (!(validator.validateInput(Regex.nameRegex, newTeamName, UserMessages.INVALID_NAME))) {
+			throw new InvalidNameException(UserMessages.INVALID_NAME_EXCEPTION);
+		}
+		teamManager.updateTeamName(teamId, newTeamName);
+	}
+	
+	public void addNewPlayer(Player player) throws InvalidNameException {
+		if (!(validator.validateInput(Regex.nameRegex, player.getFirstName(), UserMessages.INVALID_FIRST_NAME)
+				&& validator.validateInput(Regex.nameRegex, player.getLastName(), UserMessages.INVALID_LAST_NAME))) {
+			throw new InvalidNameException(UserMessages.INVALID_NAME_EXCEPTION);
+		}
+		teamManager.addNewPlayer(player);
 	}
 }

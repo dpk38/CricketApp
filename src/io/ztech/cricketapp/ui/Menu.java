@@ -3,6 +3,7 @@ package io.ztech.cricketapp.ui;
 import java.util.Scanner;
 
 import io.ztech.cricketapp.beans.User;
+import io.ztech.cricketapp.constants.EditTeamOptions;
 import io.ztech.cricketapp.constants.MainMenuOptions;
 import io.ztech.cricketapp.constants.MatchMenuOptions;
 import io.ztech.cricketapp.constants.PlayerMenuOptions;
@@ -83,7 +84,7 @@ public class Menu {
 			teamController.displayTeams(user);
 			break;
 		case EDIT_TEAM:
-			//showEditTeamMenu();
+			showEditTeamMenu();
 			break;
 		case CREATE_TEAM:
 			teamHandler.createTeam(user);
@@ -115,25 +116,25 @@ public class Menu {
 		} while (Character.toLowerCase(scanner.next().charAt(0)) == 'y');
 	}
 	
-/*	public void showEditTeamMenu() {
-		System.out.print(UserMessages.EDIT_TEAM_MENU);	// change team name, add player, remove player
+	public void showEditTeamMenu() {
+		System.out.print(UserMessages.EDIT_TEAM_MENU);
 		EditTeamOptions option = EditTeamOptions.values()[scanner.nextInt() - 1];
 		scanner.nextLine();
 		do {
 			switch (option) {
 			case CHANGE_NAME:
-				
+				teamHandler.editTeamName(user);
 				break;
 			case ADD_PLAYER:
-				
+				teamHandler.addNewPlayer(user);
 				break;
 			case REMOVE_PLAYER:
-				
+				teamHandler.removePlayer(user);
 				break;
 			default:
 				System.out.println(UserMessages.INVALID_CHOICE);
 			}
 			System.out.print(UserMessages.FURTHER_CHANGES);
 		} while (Character.toLowerCase(scanner.next().charAt(0)) == 'y');	
-	}*/
+	}
 }
