@@ -21,9 +21,9 @@ public class TeamManager {
 	}
 	
 	public void displayTeams(User user) {
-		System.out.println(UserMessages.TEAM_TABLE);
 		ArrayList<Team> teamList = dao.fetchTeams(user);
 		for (Team team : teamList) {
+			System.out.println(UserMessages.TEAM_TABLE);
 			System.out.println(team.getTeamId() + "\t" + team.getTeamName());
 			playerManager.printPlayerDetails(team);
 		}
@@ -43,5 +43,9 @@ public class TeamManager {
 	
 	public void addNewPlayer(Player newPlayer) {
 		dao.insertPlayer(newPlayer);
+	}
+	
+	public Team fetchTeam(int teamId) {
+		return dao.fetchTeam(teamId);
 	}
 }

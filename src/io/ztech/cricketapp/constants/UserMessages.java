@@ -9,10 +9,13 @@ public class UserMessages {
 	public static final String ENTER_TEAM_NAME = "\nEnter team name: ";
 	public static final String ENTER_NEW_NAME = "\nEnter the updated name: ";
 	public static final String ENTER_TEAM_ID = "\nEnter team id: ";
-	public static final String ENTER_LINE_UP = "\nEnter line up number: ";
+	public static final String ENTER_LINE_UP = "\nEnter players line-up for Team ";
 	public static final String ENTER_PASSWORD = "\nEnter password: ";
+	public static final String ENTER_MATCH_DATE = "\nEnter a valid match date in the following format (YYYY-MM-DD): ";
 	
 	public static final String INVALID_NAME = "\nInvalid name entered!";
+	public static final String INVALID_PLAYER = "\nInvalid player selected! Try again: ";
+	public static final String INVALID_DATE = "\nInvalid date entered. Please try again!";
 	public static final String INVALID_FIRST_NAME = "\nInvalid first name entered!";
 	public static final String INVALID_LAST_NAME = "\nInvalid last name entered!";
 	public static final String INVALID_CHOICE = "\nInvalid choice selected!";
@@ -20,6 +23,7 @@ public class UserMessages {
 	public static final String INCORRECT_PASSWORD = "\nThe password you have entered is incorrect. Please try again!";
 	public static final String NO_SUCH_USER = "\nNo such user exists! Press (1) to sign up or (2) to retry: ";
 	public static final String NO_SUCH_TEAM = "\nNo such team exists! Retry ";
+	public static final String NO_SUCH_MATCH = "\nNo such match exists! Retry ";
 	public static final String NO_SUCH_PLAYER = "\nNo such player exists! Retry ";
 	
 	public static final String MAIN_MENU = "(1) Matches\n(2) Teams\n(3) Players\n(4) Exit\nEnter choice: ";
@@ -38,11 +42,22 @@ public class UserMessages {
 	
 	public static final String TEAM_TABLE = "\nID\tName\n--------------";
 	public static final String PLAYER_TABLE = "\nTeam\tID\tFirstName\tLastName\n-----------------------------------------";
+	public static final String MATCH_TABLE = "\nMatch\tDate\t\tTeam_A\tTeam_B\tStatus\t\tToss\tResult\n----------------------------------------------------------------------";
+	
+	public static final String CHOOSE_TEAM = "\nChoose a team from the following. Enter team ID: ";
+	public static final String CHOOSE_MATCH = "\nChoose a match from the following. Enter match ID: ";
+	public static final String CHOOSE_PLAYER = "\nChoose a player from the following. Enter player ID: ";
+	public static final String CHOOSE_ONSTRIKE = "\nChoose an on strike player. Enter id: ";
+	public static final String CHOOSE_OFFSTRIKE = "\nChoose an off strike player. Enter id: ";
+	public static final String CHOOSE_BOWLER = "\nChoose a bowler. Enter id: ";
+	public static final String CHOSE_TO_BAT = "\nEnter which team chose to bat. Enter id: ";
 	
 	public static final String CREATING_PLAYERS = "\nCreating players:\n------------------";
 	public static final String USER_ALREADY_EXISTS= "\nUser already exists. Try a different user name!";
-	public static final String CHOOSE_TEAM = "\nChoose a team from the following. Enter team ID: ";
-	public static final String CHOOSE_PLAYER = "\nChoose a player from the following. Enter player ID: ";
 	public static final String SELECT_NEW_TEAM_ID = "\nSelect a new team ID for the player";
+	public static final String SELECT_TWO_TEAMS = "\nSelect two teams from the following to compete each other";
+	public static final String NUMBER_OF_PLAYERS = "Enter number of players in match for Team ";
+	public static final String TOSS_RESULT = "\nThe toss has been won by Team ";
+	public static final String BALL_PLAYED = "\n(1) 1 Run\n(2) 2 Runs\n(3) 3 Runs\n(4) 4 Runs\n(5) 5 Runs\n(6) 6 Runs\nEnter: ";
 }
 

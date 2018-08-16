@@ -10,6 +10,7 @@ import io.ztech.cricketapp.constants.MatchMenuOptions;
 import io.ztech.cricketapp.constants.PlayerMenuOptions;
 import io.ztech.cricketapp.constants.TeamMenuOptions;
 import io.ztech.cricketapp.constants.UserMessages;
+import io.ztech.cricketapp.controller.MatchController;
 import io.ztech.cricketapp.controller.PlayerController;
 import io.ztech.cricketapp.controller.TeamController;
 
@@ -20,6 +21,8 @@ public class Menu {
 	TeamController teamController;
 	PlayerHandler playerHandler;
 	PlayerController playerController;
+	MatchHandler matchHandler;
+	MatchController matchController;
 	User user;
 	
 	public Menu(User user) {
@@ -28,6 +31,8 @@ public class Menu {
 		playerController = new PlayerController();
 		teamHandler = new TeamHandler();
 		teamController = new TeamController();
+		matchHandler = new MatchHandler();
+		matchController = new MatchController();
 		this.user = user;
 	}
 	
@@ -63,16 +68,16 @@ public class Menu {
 			scanner.nextLine();
 			switch (option) {
 			case PLAY_MATCH:
-				//MatchService.playMatch();
+				//matchHandler.playMatch(user);
 				break;
 			case VIEW_MATCHES:
-				//MatchService.displayMatches();
+				matchController.displayMatches(user);
 				break;
 			case EDIT_MATCH:
 				//MatchService.editMatch();
 				break;
 			case CREATE_MATCH:
-				//MatchService.createMatch();
+				matchHandler.createMatch(user);
 				break;
 			default:
 				System.out.println(UserMessages.INVALID_CHOICE);

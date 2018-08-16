@@ -1,29 +1,41 @@
 package io.ztech.cricketapp.beans;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.sql.Date;
 
 import io.ztech.cricketapp.constants.MatchResult;
 
 public class Match {
-	int matchId, tossWonBy;
-	Date matchDate;
-	String status;
-	Team teamA, teamB;
-	MatchResult matchResult;
-	LineUp lineUp;
+	int matchId;
 	User user;
+	Date matchDate;
+	Team teamA, teamB;
+	ArrayList<Integer> teamALineUp, teamBLineUp;
+	String status;
+	int tossWonBy;
+	MatchResult matchResult;
 	
+	public Match() {
+		teamALineUp = new ArrayList<>();
+		teamBLineUp = new ArrayList<>();
+	}
+	public ArrayList<Integer> getTeamALineUp() {
+		return teamALineUp;
+	}
+	public void setTeamALineUp(ArrayList<Integer> teamALineUp) {
+		this.teamALineUp = teamALineUp;
+	}
+	public ArrayList<Integer> getTeamBLineUp() {
+		return teamBLineUp;
+	}
+	public void setTeamBLineUp(ArrayList<Integer> teamBLineUp) {
+		this.teamBLineUp = teamBLineUp;
+	}
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
-	}
-	public LineUp getLineUp() {
-		return lineUp;
-	}
-	public void setLineUp(LineUp lineUp) {
-		this.lineUp = lineUp;
 	}
 	public MatchResult getMatchResult() {
 		return matchResult;

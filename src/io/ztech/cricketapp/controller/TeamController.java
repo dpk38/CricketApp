@@ -50,4 +50,8 @@ public class TeamController {
 		}
 		teamManager.addNewPlayer(player);
 	}
+	
+	public Team fetchTeam(int teamId) {
+		return teamManager.fetchTeam(teamId);
+	}
 }

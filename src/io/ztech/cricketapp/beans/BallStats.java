@@ -1,7 +1,8 @@
 package io.ztech.cricketapp.beans;
 
 public class BallStats {
-	int matchId, teamBatting, teamBowling, bowlerId, batmsanId, runsGiven, wicketTaken;
+	int matchId, teamBatting, teamBowling, bowlerId, batmsanId, runsGiven;
+	boolean wicketTaken;
 
 	public int getMatchId() {
 		return matchId;
@@ -51,11 +52,23 @@ public class BallStats {
 		this.runsGiven = runsGiven;
 	}
 
-	public int getWicketTaken() {
+	public boolean getWicketTaken() {
 		return wicketTaken;
 	}
 
-	public void setWicketTaken(int wicketTaken) {
+	public void setWicketTaken(boolean wicketTaken) {
+		this.wicketTaken = wicketTaken;
+	}
+
+	public BallStats(int matchId, int teamBatting, int teamBowling, int bowlerId, int batmsanId, int runsGiven,
+			boolean wicketTaken) {
+		super();
+		this.matchId = matchId;
+		this.teamBatting = teamBatting;
+		this.teamBowling = teamBowling;
+		this.bowlerId = bowlerId;
+		this.batmsanId = batmsanId;
+		this.runsGiven = runsGiven;
 		this.wicketTaken = wicketTaken;
 	}
 }
