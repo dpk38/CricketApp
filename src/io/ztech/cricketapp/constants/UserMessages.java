@@ -42,6 +42,7 @@ public class UserMessages {
 	
 	public static final String TEAM_TABLE = "\nID\tName\n--------------";
 	public static final String PLAYER_TABLE = "\nTeam\tID\tFirstName\tLastName\n-----------------------------------------";
+	public static final String PLAYER_NAME_TABLE = "\nID\tFirstName\tLastName\n-----------------------------------";
 	public static final String MATCH_TABLE = "\nMatch\tDate\t\tTeam_A\tTeam_B\tStatus\t\tToss\tResult\n----------------------------------------------------------------------";
 	
 	public static final String CHOOSE_TEAM = "\nChoose a team from the following. Enter team ID: ";
@@ -58,6 +59,6 @@ public class UserMessages {
 	public static final String SELECT_TWO_TEAMS = "\nSelect two teams from the following to compete each other";
 	public static final String NUMBER_OF_PLAYERS = "Enter number of players in match for Team ";
 	public static final String TOSS_RESULT = "\nThe toss has been won by Team ";
-	public static final String BALL_PLAYED = "\n(1) 1 Run\n(2) 2 Runs\n(3) 3 Runs\n(4) 4 Runs\n(5) 5 Runs\n(6) 6 Runs\nEnter: ";
+	public static final String BALL_PLAYED = "\n(1) 1 Run\n(2) 2 Runs\n(3) 3 Runs\n(4) 4 Runs\n(5) 5 Runs\n(6) 6 Runs\t(7) Wicket!\nEnter: ";
 }
 

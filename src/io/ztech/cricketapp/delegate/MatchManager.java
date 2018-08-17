@@ -3,7 +3,9 @@ package io.ztech.cricketapp.delegate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import io.ztech.cricketapp.beans.BallStats;
 import io.ztech.cricketapp.beans.Match;
+import io.ztech.cricketapp.beans.Player;
 import io.ztech.cricketapp.beans.User;
 import io.ztech.cricketapp.constants.UserMessages;
 import io.ztech.cricketapp.dao.CricketDAO;
@@ -38,5 +40,13 @@ public class MatchManager {
 	
 	public Match fetchMatch(int matchId) {
 		return dao.fetchMatch(matchId);
+	}
+	
+	public ArrayList<Player> fetchPlayers(ArrayList<Integer> players) {
+		return dao.fetchPlayers(players);
+	}
+	
+	public void insertBallStats(BallStats ballStats) {
+		dao.insertBallStats(ballStats);
 	}
 }

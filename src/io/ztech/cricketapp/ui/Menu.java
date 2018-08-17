@@ -68,7 +68,7 @@ public class Menu {
 			scanner.nextLine();
 			switch (option) {
 			case PLAY_MATCH:
-				//matchHandler.playMatch(user);
+				matchHandler.playMatch(user);
 				break;
 			case VIEW_MATCHES:
 				matchController.displayMatches(user);

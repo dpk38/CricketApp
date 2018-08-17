@@ -6,7 +6,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 import io.ztech.cricketapp.beans.BallStats;
+import io.ztech.cricketapp.beans.LineUp;
 import io.ztech.cricketapp.beans.Match;
+import io.ztech.cricketapp.beans.Player;
 import io.ztech.cricketapp.beans.Team;
 import io.ztech.cricketapp.beans.User;
 import io.ztech.cricketapp.constants.Regex;
@@ -61,14 +63,17 @@ public class MatchHandler {
 		matchController.setMatch(newMatch);
 	}
 	
-	public ArrayList<Integer> getLineUp(Team team) {
-		ArrayList<Integer> lineUp = new ArrayList<>();
+	public LineUp getLineUp(Team team) {
+		LineUp lineUp = new LineUp();
+		lineUp.setTeamId(team.getTeamId());
 		System.out.print(UserMessages.NUMBER_OF_PLAYERS + team.getTeamName());
 		int numberOfPlayers = scanner.nextInt();
 		System.out.println(UserMessages.ENTER_LINE_UP + team.getTeamName());
+		ArrayList<Integer> order = new ArrayList<Integer>();
 		for (int i = 0; i < numberOfPlayers; i++) {
-			lineUp.add(scanner.nextInt());
+			order.add(scanner.nextInt());
 		}
+		lineUp.setPlayerId(order);
 		return lineUp;
 	}
 
@@ -80,6 +85,7 @@ public class MatchHandler {
 		
 		int matchId = chooseMatch(user);
 		Match match = matchController.fetchMatch(matchId);
+		
 		match.setStatus("ongoing");
 		match.setTossWonBy(tossCoin(match));
 		System.out.println(UserMessages.CHOSE_TO_BAT);
@@ -87,26 +93,26 @@ public class MatchHandler {
 		scanner.nextLine();
 		if (battingTeamId == match.getTeamA().getTeamId()) {
 			battingTeam = match.getTeamA();
-			batsmen = match.getTeamALineUp();
+			batsmen = match.getTeamALineUp().getPlayerId();
 			bowlingTeam = match.getTeamB();
-			bowlers = match.getTeamBLineUp();
+			bowlers = match.getTeamBLineUp().getPlayerId();
 		} else {
 			battingTeam = match.getTeamB();
-			batsmen = match.getTeamBLineUp();
+			batsmen = match.getTeamBLineUp().getPlayerId();
 			bowlingTeam = match.getTeamA();
-			bowlers = match.getTeamALineUp();
+			bowlers = match.getTeamALineUp().getPlayerId();
 		}
-		matchController.showPlayers(match, batsmen);
+		showPlayers(batsmen);
 		System.out.println(UserMessages.CHOOSE_ONSTRIKE);
 		onStrike = choosePlayer(match, battingTeam);
 		System.out.println(UserMessages.CHOOSE_OFFSTRIKE);
 		offStrike = choosePlayer(match, battingTeam);
-		matchController.showPlayers(match, bowlers);
+		showPlayers(bowlers);
 		System.out.println(UserMessages.CHOOSE_BOWLER);
 		bowler = choosePlayer(match, bowlingTeam);
 		
 		while (!batsmen.isEmpty() && overCount < 20.0) {
-			int score;
+			int score = 0;
 			boolean wicketTaken = false;
 			System.out.print(UserMessages.BALL_PLAYED);
 			switch (scanner.nextInt()) {
@@ -135,9 +141,31 @@ public class MatchHandler {
 			}
 			totalScore += score;
 			BallStats ballStats = new BallStats(matchId, battingTeam.getTeamId(), bowlingTeam.getTeamId(), bowler, onStrike, score, wicketTaken);
-			matchController.insertBallStats();
+			matchController.insertBallStats(ballStats);
 			if (score % 2 != 0) {
-				
+				int tempPlayer = onStrike;
+				onStrike = offStrike;
+				offStrike = tempPlayer;
+			}
+			if (wicketTaken) {
+				batsmen.remove((Integer) onStrike);
+				if (batsmen.isEmpty()) {
+					System.out.println("All the batsmen are knocked out! Your team's total score is " + totalScore);
+					break;
+				}
+				showPlayers(batsmen);
+				System.out.println(UserMessages.CHOOSE_ONSTRIKE);
+				onStrike = choosePlayer(match, battingTeam);
+			}
+			overCount += 0.1;
+			if (((int) (overCount * 10)) % 10 == 7) {
+				overCount += 0.3;
+				int tempBowler = bowler;
+				bowlers.remove((Integer) bowler);
+				showPlayers(bowlers);
+				System.out.println(UserMessages.CHOOSE_BOWLER);
+				bowler = choosePlayer(match, bowlingTeam);
+				bowlers.add(tempBowler);
 			}
 		}
 	}
@@ -162,10 +190,10 @@ public class MatchHandler {
 		Random random = new Random();
 		if (random.nextInt(2) == 0) {
 			System.out.println();
-			System.out.println(UserMessages.TOSS_RESULT + match.getTeamA().getTeamName());
+			System.out.println(UserMessages.TOSS_RESULT + match.getTeamA().getTeamId());
 			return match.getTeamA().getTeamId();
 		} else {
-			System.out.println(UserMessages.TOSS_RESULT + match.getTeamB().getTeamName());
+			System.out.println(UserMessages.TOSS_RESULT + match.getTeamB().getTeamId());
 			return match.getTeamB().getTeamId();
 		}
 	}
@@ -177,17 +205,25 @@ public class MatchHandler {
 			id = scanner.nextInt();
 			scanner.nextLine();
 			if (team.getTeamId() == match.getTeamA().getTeamId()) {
-				if (!(match.getTeamALineUp().contains(id))) {
+				if (!(match.getTeamALineUp().getPlayerId().contains(id))) {
 					System.out.print(UserMessages.INVALID_PLAYER);
 					retry = 'y';
 				}
 			} else {
-				if (match.getTeamBLineUp().contains(id)) {
+				if (!(match.getTeamBLineUp().getPlayerId().contains(id))) {
 					System.out.print(UserMessages.INVALID_PLAYER);
 					retry = 'y';
 				}
 			}
 		} while (retry == 'y');
 		return id;
+	}
+
+	public void showPlayers(ArrayList<Integer> players) {
+		ArrayList<Player> playerList = matchController.fetchPlayers(players);
+		System.out.println(UserMessages.PLAYER_NAME_TABLE);
+		for (Player player : playerList) {
+			System.out.println(player.getPlayerId() + "\t" + player.getFirstName() + "\t" + player.getLastName());
+		}
 	}
 }

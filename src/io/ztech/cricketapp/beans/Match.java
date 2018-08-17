@@ -1,6 +1,5 @@
 package io.ztech.cricketapp.beans;
 
-import java.util.ArrayList;
 import java.sql.Date;
 
 import io.ztech.cricketapp.constants.MatchResult;
@@ -10,25 +9,21 @@ public class Match {
 	User user;
 	Date matchDate;
 	Team teamA, teamB;
-	ArrayList<Integer> teamALineUp, teamBLineUp;
+	LineUp teamALineUp, teamBLineUp;
 	String status;
 	int tossWonBy;
 	MatchResult matchResult;
 	
-	public Match() {
-		teamALineUp = new ArrayList<>();
-		teamBLineUp = new ArrayList<>();
-	}
-	public ArrayList<Integer> getTeamALineUp() {
+	public LineUp getTeamALineUp() {
 		return teamALineUp;
 	}
-	public void setTeamALineUp(ArrayList<Integer> teamALineUp) {
+	public void setTeamALineUp(LineUp teamALineUp) {
 		this.teamALineUp = teamALineUp;
 	}
-	public ArrayList<Integer> getTeamBLineUp() {
+	public LineUp getTeamBLineUp() {
 		return teamBLineUp;
 	}
-	public void setTeamBLineUp(ArrayList<Integer> teamBLineUp) {
+	public void setTeamBLineUp(LineUp teamBLineUp) {
 		this.teamBLineUp = teamBLineUp;
 	}
 	public User getUser() {
