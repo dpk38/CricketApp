@@ -88,6 +88,7 @@ public class MatchHandler {
 		
 		match.setStatus("ongoing");
 		match.setTossWonBy(tossCoin(match));
+		
 		System.out.println(UserMessages.CHOSE_TO_BAT);
 		int battingTeamId = scanner.nextInt();
 		scanner.nextLine();
@@ -105,40 +106,44 @@ public class MatchHandler {
 		showPlayers(batsmen);
 		System.out.println(UserMessages.CHOOSE_ONSTRIKE);
 		onStrike = choosePlayer(match, battingTeam);
+		batsmen.remove((Integer) onStrike);
 		System.out.println(UserMessages.CHOOSE_OFFSTRIKE);
 		offStrike = choosePlayer(match, battingTeam);
+		batsmen.remove((Integer) offStrike);
 		showPlayers(bowlers);
 		System.out.println(UserMessages.CHOOSE_BOWLER);
 		bowler = choosePlayer(match, bowlingTeam);
 		
-		while (!batsmen.isEmpty() && overCount < 20.0) {
+		System.out.println(UserMessages.INPUT_FORMAT);
+		while (overCount < 20.0) {
 			int score = 0;
 			boolean wicketTaken = false;
-			System.out.print(UserMessages.BALL_PLAYED);
-			switch (scanner.nextInt()) {
-			case 1:
-				score = 1;
-				break;
-			case 2:
-				score = 2;
-				break;
-			case 3:
-				score = 3;
-				break;
-			case 4:
-				score = 4;
-				break;
-			case 5:
-				score = 5;
-				break;
-			case 6:
-				score = 6;
-				break;
-			case 7:
-				score = 0;
-				wicketTaken = true;
-				break;
+			System.out.println(UserMessages.CURRENT_SCORE + totalScore + UserMessages.ON_STRIKE + onStrike + UserMessages.OFF_STRIKE + offStrike + UserMessages.BOWLER + bowler);
+			String ballPlayed, extra = "";
+			do {
+				System.out.print(UserMessages.ENTER_BALL);
+				ballPlayed = scanner.nextLine();
+				if (validator.validateInput(Regex.ballRegex, ballPlayed, UserMessages.INVALID_BALL)) {
+					break;
+				} else {
+					System.out.println(UserMessages.INPUT_FORMAT);
+					continue;
+				}
+			} while (true);
+			
+			if (!ballPlayed.contains("+")) {
+				score = Integer.parseInt(ballPlayed);
+			} else {
+				extra = ballPlayed.split("\\+")[0];
+				score = Integer.parseInt(ballPlayed.split("\\+")[1]);
 			}
+			
+			if (extra.equals("out")) {
+				wicketTaken = true;
+			} else if (extra.equals("no") || extra.equals("w")) {
+				totalScore += 1;
+			}
+			
 			totalScore += score;
 			BallStats ballStats = new BallStats(matchId, battingTeam.getTeamId(), bowlingTeam.getTeamId(), bowler, onStrike, score, wicketTaken);
 			matchController.insertBallStats(ballStats);
@@ -148,24 +153,37 @@ public class MatchHandler {
 				offStrike = tempPlayer;
 			}
 			if (wicketTaken) {
-				batsmen.remove((Integer) onStrike);
 				if (batsmen.isEmpty()) {
-					System.out.println("All the batsmen are knocked out! Your team's total score is " + totalScore);
+					System.out.println(UserMessages.ALL_PLAYERS_OUT + totalScore);
 					break;
 				}
 				showPlayers(batsmen);
-				System.out.println(UserMessages.CHOOSE_ONSTRIKE);
+				System.out.println(UserMessages.CHOOSE_NEXT_BATSMAN);
 				onStrike = choosePlayer(match, battingTeam);
+				batsmen.remove((Integer) onStrike);
 			}
 			overCount += 0.1;
-			if (((int) (overCount * 10)) % 10 == 7) {
-				overCount += 0.3;
-				int tempBowler = bowler;
-				bowlers.remove((Integer) bowler);
+			if (((int) (overCount * 10)) % 10 == 6) {
+				overCount += 0.4;
+				int tempPlayer = onStrike;
+				onStrike = offStrike;
+				offStrike = tempPlayer;
+				int previousBowler = bowler;
 				showPlayers(bowlers);
-				System.out.println(UserMessages.CHOOSE_BOWLER);
-				bowler = choosePlayer(match, bowlingTeam);
-				bowlers.add(tempBowler);
+				do {
+					System.out.println(UserMessages.CHOOSE_BOWLER);
+					bowler = choosePlayer(match, bowlingTeam);
+					if (bowler == previousBowler) {
+						System.out.println(UserMessages.SAME_BOWLER);
+						char decision = scanner.nextLine().charAt(0);
+						if (decision == 'y') {
+							break;
+						}
+					} else {
+						break;
+					}
+				} while (true);
+				bowlers.add(bowler);
 			}
 		}
 	}
